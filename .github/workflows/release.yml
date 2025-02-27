@@ -46,12 +46,3 @@ jobs:
         run: npm publish --access public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-
-      - name: Crear y subir un nuevo tag
-        run: |
-          git config --global user.name "github-actions"
-          git config --global user.email "github-actions@github.com"
-          git tag v${VERSION}
-          git push origin v${VERSION}
-        env:
-          VERSION: ${{ env.VERSION }}
