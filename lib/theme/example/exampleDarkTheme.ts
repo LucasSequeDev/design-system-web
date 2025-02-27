@@ -25,4 +25,7 @@ export const EXAMPLE_DARK_TOKENS = {
   },
 } as const;
 
-export const explameDarkTheme = createTheme(EXAMPLE_DARK_TOKENS);
+export const explameDarkTheme = createTheme({
+  ...EXAMPLE_DARK_TOKENS,
+  cssVariables: { cssVarPrefix: "example-light" },
+});

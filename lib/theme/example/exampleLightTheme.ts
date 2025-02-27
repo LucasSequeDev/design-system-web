@@ -25,4 +25,7 @@ export const EXAMPLE_LIGHT_TOKENS = {
   },
 } as const;
 
-export const explameLightTheme = createTheme(EXAMPLE_LIGHT_TOKENS);
+export const explameLightTheme = createTheme({
+  ...EXAMPLE_LIGHT_TOKENS,
+  cssVariables: { cssVarPrefix: "example-light" },
+});
