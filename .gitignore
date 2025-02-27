@@ -26,3 +26,6 @@ dist-ssr
 # Test Results
 .test/
 coverage/
+
+# enviroments
+.env

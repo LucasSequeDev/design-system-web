@@ -1,0 +1,57 @@
+name: Publish Package
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  validate-and-publish:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout del código
+        uses: actions/checkout@v3
+
+      - name: Configurar Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+          registry-url: "https://npm.pkg.github.com/"
+
+      - name: Instalar dependencias
+        run: npm install
+
+      - name: Obtener la versión del package.json
+        id: package_version
+        run: echo "VERSION=$(node -p "require('./package.json').version")" >> $GITHUB_ENV
+
+      - name: Verificar si el tag ya existe
+        run: |
+          if git tag | grep -q "v${VERSION}"; then
+            echo "❌ El tag v${VERSION} ya existe. Deteniendo la ejecución."
+            exit 1
+          fi
+        env:
+          VERSION: ${{ env.VERSION }}
+
+      - name: Construir el paquete
+        run: npm run build
+
+      - name: Publicar en GitHub Packages
+        if: github.event_name == 'push'
+        run: npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NODE_AUTH_TOKEN }}
+
+      - name: Crear y subir un nuevo tag
+        run: |
+          git config --global user.name "github-actions"
+          git config --global user.email "github-actions@github.com"
+          git tag v${VERSION}
+          git push origin v${VERSION}
+        env:
+          VERSION: ${{ env.VERSION }}
