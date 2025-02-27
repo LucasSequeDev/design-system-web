@@ -1,4 +1,4 @@
-name: Publish Package
+name: Publish to npm
 
 on:
   push:
@@ -9,18 +9,19 @@ on:
       - master
 
 jobs:
-  validate-and-publish:
+  publish:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout del código
         uses: actions/checkout@v3
 
-      - name: Configurar Node.js
+      - name: Configurar Node.js con npm
         uses: actions/setup-node@v3
         with:
           node-version: 18
-          registry-url: "https://npm.pkg.github.com/"
+          registry-url: "https://registry.npmjs.org/"
+          always-auth: true
 
       - name: Instalar dependencias
         run: npm install
@@ -41,11 +42,10 @@ jobs:
       - name: Construir el paquete
         run: npm run build
 
-      - name: Publicar en GitHub Packages
-        if: github.event_name == 'push'
-        run: npm publish
+      - name: Publicar en npm
+        run: npm publish --access public
         env:
-          NODE_AUTH_TOKEN: ${{ secrets.NODE_AUTH_TOKEN }}
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       - name: Crear y subir un nuevo tag
         run: |

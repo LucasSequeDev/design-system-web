@@ -1,5 +1,5 @@
 {
-  "name": "@LucasSequeDev/dsw",
+  "name": "@lucassequedev/dsw",
   "private": false,
   "version": "0.0.0",
   "type": "module",
@@ -77,8 +77,5 @@
     "extends": [
       "plugin:storybook/recommended"
     ]
-  },
-  "publishConfig": {
-    "registry": "https://npm.pkg.github.com/"
   }
 }
